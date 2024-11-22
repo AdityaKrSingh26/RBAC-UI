@@ -1,28 +1,36 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Users, Shield, Activity, Settings, Layout as LayoutIcon } from 'lucide-react';
+import { 
+  Users, 
+  Shield, 
+  Activity, 
+  Settings, 
+  Layout as LayoutIcon 
+} from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC = ({ isDrawer = false }: any) => {
   const { theme } = useTheme();
 
   const navigation = [
-    { name: 'dashboard', href: '/', icon: LayoutIcon },
-    { name: 'users', href: '/users', icon: Users },
-    { name: 'roles', href: '/roles', icon: Shield },
-    { name: 'activity', href: '/activity', icon: Activity },
-    { name: 'settings', href: '/settings', icon: Settings },
+    { name: 'Dashboard', href: '/', icon: LayoutIcon },
+    { name: 'Users', href: '/users', icon: Users },
+    { name: 'Roles', href: '/roles', icon: Shield },
+    { name: 'Activity', href: '/activity', icon: Activity },
+    { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
   return (
-    <div className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-      } border-r ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+    <div
+      className={`${isDrawer ? 'block h-full' : 'hidden'} min:h-screen md:block inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} border-r ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}
+    >
       <div className="flex h-16 items-center justify-center border-b border-gray-200 dark:border-gray-700">
         <Shield className="h-8 w-8 text-indigo-600" />
-        <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">
+        <span className={`ml-2 text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
           Admin
         </span>
       </div>
+
       <nav className="mt-5 space-y-1 px-2">
         {navigation.map((item) => (
           <NavLink
@@ -46,6 +54,7 @@ const Sidebar: React.FC = () => {
           </NavLink>
         ))}
       </nav>
+
     </div>
   );
 };

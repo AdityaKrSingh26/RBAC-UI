@@ -1,17 +1,12 @@
 import React from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useTranslation } from 'react-i18next';
-import { Sun, Moon, Globe } from 'lucide-react';
+import { 
+  Sun, 
+  Moon
+} from 'lucide-react';
 
 const Settings: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
-  const { i18n } = useTranslation();
-
-  const languages = [
-    { code: 'en', name: 'English' },
-    { code: 'es', name: 'Español' },
-    { code: 'fr', name: 'Français' },
-  ];
 
   return (
     <div>
@@ -60,7 +55,7 @@ const Settings: React.FC = () => {
           </div>
         </div>
 
-        {/* Language Settings */}
+        {/* Language Settings
         <div className={`p-6 rounded-lg shadow ${
           theme === 'dark' ? 'bg-gray-800' : 'bg-white'
         }`}>
@@ -87,7 +82,9 @@ const Settings: React.FC = () => {
               ))}
             </select>
           </div>
-        </div>
+        </div> */}
+
+
       </div>
     </div>
   );

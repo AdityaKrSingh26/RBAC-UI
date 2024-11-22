@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Activity as ActivityIcon } from 'lucide-react';
+import { 
+  Activity as ActivityIcon 
+} from 'lucide-react';
 import { RootState } from '../store';
 import { useTheme } from '../contexts/ThemeContext';
 import { format } from 'date-fns';
