@@ -4,19 +4,27 @@ const Users = [
         name: "Alice Johnson",
         email: "alice.johnson@example.com",
         roleId: "1",
+        status: "active",
     },
     {
         id: "5002",
         name: "Bob Smith",
         email: "bob.smith@example.com",
         roleId: "2",
+        status: "inactive",
     },
     {
         id: "5003",
         name: "Charlie Brown",
         email: "charlie.brown@example.com",
         roleId: "3",
+        status: "active",
     },
+    {
+        id: "5004",
+        name: "David Lee",
+        email: "david@david.com",
+    }
 ];
 
 const Roles = [
@@ -56,6 +64,12 @@ const Activity = [
         userId: "5001",
         timestamp: "2024-11-22T11:00:00Z",
     },
+    {
+        id: "104",
+        type: "delete_user",
+        userId: "5003",
+        timestamp: "2024-11-22T11:30:00Z",
+    }
 ];
 
 const Permission = [

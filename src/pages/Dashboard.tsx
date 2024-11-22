@@ -1,45 +1,48 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  Users,
-  Shield,
-  Activity,
-  AlertTriangle
-} from 'lucide-react';
-import { RootState } from '../store';
 import { useTheme } from '../contexts/ThemeContext';
 import CreateNewRole from '../components/CreateNewRole';
 import CreateNewUser from '../components/CreateNewUser';
+import {
+  Users as UsersIcon,
+  Shield,
+  Activity
+} from 'lucide-react';
+
+// Import data directly from data.ts
+import {
+  Users as UsersData,
+  Roles as RolesData,
+  Activity as ActivitiesData
+} from '../Data/Data';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const users = useSelector((state: RootState) => state.users.users);
-  const roles = useSelector((state: RootState) => state.roles.roles);
-  const activities = useSelector((state: RootState) => state.activity.logs);
 
-  // State for New User Popup
+  // State for New User and Role Popup
   const [isNewUserPopupOpen, setIsNewUserPopupOpen] = useState(false);
-
-  // State for New Role Popup
   const [isNewRolePopupOpen, setIsNewRolePopupOpen] = useState(false);
 
-
+  // Statistics data
   const stats = [
-    { name: 'Total Users', value: users.length, icon: Users },
-    { name: 'Active Roles', value: roles.length, icon: Shield },
-    { name: 'Recent Activities', value: activities.length, icon: Activity },
-    { name: 'Pending Actions', value: 3, icon: AlertTriangle },
+    { name: 'Total Users', value: UsersData.length, icon: UsersIcon },
+    { name: 'Active Roles', value: RolesData.length, icon: Shield },
+    { name: 'Recent Activities', value: ActivitiesData.length, icon: Activity },
+    // { name: 'Pending Actions', value: 3, icon: AlertTriangle },
   ];
 
   return (
     <div>
-      <h1 className={`text-2xl font-semibold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+      <h1
+        className={`text-2xl font-semibold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}
+      >
         Dashboard Overview
       </h1>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Statistics Section */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((item) => (
           <div
             key={item.name}
@@ -47,21 +50,24 @@ const Dashboard: React.FC = () => {
               } px-4 py-5 shadow sm:px-6 sm:py-6`}
           >
             <dt>
-              <div className={`absolute rounded-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'
-                } p-3`}>
-                <item.icon
-                  className="h-6 w-6 text-indigo-600"
-                  aria-hidden="true"
-                />
+              <div
+                className={`absolute rounded-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'
+                  } p-3`}
+              >
+                <item.icon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
               </div>
-              <p className={`ml-16 truncate text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'
-                }`}>
+              <p
+                className={`ml-16 truncate text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'
+                  }`}
+              >
                 {item.name}
               </p>
             </dt>
-            <dd className={`ml-16 flex items-baseline pb-6 sm:pb-7`}>
-              <p className={`text-2xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
+            <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+              <p
+                className={`text-2xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}
+              >
                 {item.value}
               </p>
             </dd>
@@ -69,32 +75,42 @@ const Dashboard: React.FC = () => {
         ))}
       </div>
 
+      {/* Recent Activity Section */}
       <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
-        {/* Recent Activity */}
-        <div className={`overflow-hidden rounded-lg ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-          } shadow`}>
+        <div
+          className={`overflow-hidden rounded-lg ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+            } shadow`}
+        >
           <div className="p-6">
-            <h3 className={`text-lg font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-              }`}>
+            <h3
+              className={`text-lg font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}
+            >
               Recent Activity
             </h3>
             <div className="mt-6 flow-root">
               <ul className="-my-5 divide-y divide-gray-200 dark:divide-gray-700">
-                {activities.slice(0, 5).map((activity) => (
+                {ActivitiesData.slice(0, 5).map((activity) => (
                   <li key={activity.id} className="py-4">
                     <div className="flex items-center space-x-4">
                       <div className="min-w-0 flex-1">
-                        <p className={`truncate text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-                          }`}>
-                          {activity.action}
+                        <p
+                          className={`truncate text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+                            }`}
+                        >
+                          Type : {activity.type}
                         </p>
-                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                          }`}>
-                          {activity.details}
+                        <p
+                          className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                            }`}
+                        >
+                          User ID : {activity.userId}
                         </p>
                       </div>
-                      <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
+                      <div
+                        className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                          }`}
+                      >
                         {new Date(activity.timestamp).toLocaleDateString()}
                       </div>
                     </div>
@@ -105,13 +121,16 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-
-        {/* Quick Actions */}
-        <div className={`overflow-hidden rounded-lg ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-          } shadow`}>
+        {/* Quick Actions Section */}
+        <div
+          className={`overflow-hidden rounded-lg ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+            } shadow`}
+        >
           <div className="p-6">
-            <h3 className={`text-lg font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-              }`}>
+            <h3
+              className={`text-lg font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}
+            >
               Quick Actions
             </h3>
             <div className="mt-6 grid grid-cols-1 gap-4">
@@ -138,22 +157,9 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-
-      {/* Add User Popup */}
-      {isNewUserPopupOpen && (
-        <CreateNewUser
-          setIsNewUserPopupOpen={setIsNewUserPopupOpen}
-        />
-      )}
-
-      {/* Add Role Popup */}
-      {isNewRolePopupOpen && (
-        <CreateNewRole
-          setIsNewRolePopupOpen={setIsNewRolePopupOpen}
-        />
-      )}
-
-
+      {/* Popups */}
+      {isNewUserPopupOpen && <CreateNewUser setIsNewUserPopupOpen={setIsNewUserPopupOpen} />}
+      {isNewRolePopupOpen && <CreateNewRole setIsNewRolePopupOpen={setIsNewRolePopupOpen} />}
     </div>
   );
 };

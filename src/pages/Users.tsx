@@ -1,40 +1,30 @@
 import React, { useState } from 'react';
-import {
-  useSelector,
-  useDispatch
-} from 'react-redux';
-import {
-  Edit2,
-  Trash2, UserPlus
-} from 'lucide-react';
-import { RootState } from '../store';
-import { deleteUser } from '../store/slices/usersSlice';
+import { Edit2, Trash2, UserPlus } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { Users as UsersData } from '../Data/Data'; // Import Users from data.ts
 import CreateNewUser from '../components/CreateNewUser';
 
 const Users: React.FC = () => {
   const { theme } = useTheme();
-  const dispatch = useDispatch();
-  const users = useSelector((state: RootState) => state.users.users);
+  const [users, setUsers] = useState(UsersData); // Use local state for users
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [isNewUserPopupOpen, setIsNewUserPopupOpen] = useState(false);
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === 'all' || user.status === selectedStatus;
+    const matchesStatus =
+      selectedStatus === 'all' || user.status === selectedStatus;
     return matchesSearch && matchesStatus;
   });
 
   const handleDeleteUser = (userId: string) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
-      dispatch(deleteUser(userId));
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     }
   };
-
-  // State for New User Popup
-  const [isNewUserPopupOpen, setIsNewUserPopupOpen] = useState(false);
 
   return (
     <div>
@@ -75,13 +65,17 @@ const Users: React.FC = () => {
                     placeholder="Search users..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`px-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${theme === 'dark' ? 'bg-gray-700 text-white ring-gray-600' : ''
+                    className={`px-4 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${theme === 'dark'
+                      ? 'bg-gray-700 text-white ring-gray-600'
+                      : ''
                       }`}
                   />
                   <select
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value)}
-                    className={`block rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 ${theme === 'dark' ? 'bg-gray-700 text-white ring-gray-600' : ''
+                    className={`block rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 ${theme === 'dark'
+                      ? 'bg-gray-700 text-white ring-gray-600'
+                      : ''
                       }`}
                   >
                     <option value="all">All Status</option>
@@ -93,7 +87,9 @@ const Users: React.FC = () => {
 
               {/* Users Table */}
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className={theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}>
+                <thead
+                  className={theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}
+                >
                   <tr>
                     <th
                       scope="col"
@@ -127,14 +123,14 @@ const Users: React.FC = () => {
                       scope="col"
                       className={`relative py-3.5 pl-3 pr-4 sm:pr-6`}
                     >
-                      <span className="sr-only">
-                        Actions
-                      </span>
+                      <span className="sr-only">Actions</span>
                     </th>
                   </tr>
                 </thead>
                 <tbody
-                  className={`divide-y divide-gray-200 ${theme === 'dark' ? 'bg-gray-800 divide-gray-700' : 'bg-white'
+                  className={`divide-y divide-gray-200 ${theme === 'dark'
+                    ? 'bg-gray-800 divide-gray-700'
+                    : 'bg-white'
                     }`}
                 >
                   {filteredUsers.map((user) => (
@@ -155,7 +151,7 @@ const Users: React.FC = () => {
                         className={`whitespace-nowrap px-3 py-4 text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-500'
                           }`}
                       >
-                        {user.roles.join(', ')}
+                        {user.roleId}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm">
                         <span
@@ -164,7 +160,7 @@ const Users: React.FC = () => {
                             : 'bg-red-100 text-red-800'
                             }`}
                         >
-                          {user.status}
+                          {user.status || 'unknown'}
                         </span>
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -194,9 +190,7 @@ const Users: React.FC = () => {
 
       {/* Add User Popup */}
       {isNewUserPopupOpen && (
-        <CreateNewUser
-          setIsNewUserPopupOpen={setIsNewUserPopupOpen}
-        />
+        <CreateNewUser setIsNewUserPopupOpen={setIsNewUserPopupOpen} />
       )}
     </div>
   );

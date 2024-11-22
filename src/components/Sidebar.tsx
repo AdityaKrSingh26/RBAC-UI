@@ -1,15 +1,19 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { 
-  Users, 
-  Shield, 
-  Activity, 
-  Settings, 
-  Layout as LayoutIcon 
+import {
+  Users,
+  Shield,
+  Activity,
+  Settings,
+  Layout as LayoutIcon
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
-const Sidebar: React.FC = ({ isDrawer = false }: any) => {
+
+interface SidebarProps {
+  isDrawer?: boolean;
+}
+const Sidebar: React.FC<SidebarProps> = ({ isDrawer = false }: any) => {
   const { theme } = useTheme();
 
   const navigation = [
